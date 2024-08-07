@@ -87,14 +87,14 @@ __device__ void compute_transmat(
 
 	glm::mat3 R = quat_to_rotmat(rot);
 	glm::mat3 S = scale_to_mat(scale, mod);
-	glm::mat3 L = R * S;
+	glm::mat3 L = R * S; // in 3DGS, this is R@S@S.T@R.T
 
 	// center of Gaussians in the camera coordinate
 	glm::mat3x4 splat2world = glm::mat3x4(
 		glm::vec4(L[0], 0.0),
 		glm::vec4(L[1], 0.0),
 		glm::vec4(p_orig.x, p_orig.y, p_orig.z, 1)
-	);
+	); // see eq. (5) in the paper; the 4th row of the matrix is ommited?
 
 	glm::mat4 world2ndc = glm::mat4(
 		projmatrix[0], projmatrix[4], projmatrix[8], projmatrix[12],
